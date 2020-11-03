@@ -10,6 +10,9 @@ const Header = () => {
         <Link href='/invitation'>
           <a>청첩장</a>
         </Link>
+        <Link href='/bmw'>
+          <a>bmw</a>
+        </Link>
       </div>
   )
 };

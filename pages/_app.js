@@ -13,15 +13,7 @@ import '../sass/reset.scss';
 import { KAKAO_USER_REQUEST } from '../reducers/invitation';
 
 const Reactproject = ({ Component }) => {
-  const { kakaoUser } = useSelector((state) => state.invitation);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (!kakaoUser) {
-      dispatch({
-        type : KAKAO_USER_REQUEST
-      })
-    }
-  },[kakaoUser]);
+  
   return (
     <>
       <Head>

@@ -4,6 +4,7 @@ export const initailState = {
   msg_list : [],
   kakaoUser : null,
   kakaoLogingIn : false, 
+  kakaoLoginIng : false,
   msgLoader:false,
   msgAdded : true,
   msgCount : 0,
@@ -57,12 +58,14 @@ const reducer = (state = initailState, action) => {
       return {
         ...state,
         kakaoLogingIn : false, 
+        kakaoLoginIng : true
       }
     }
     case KAKAO_USER_SUCCESS : {
       return {
         ...state,
         kakaoLogingIn : true, 
+        kakaoLoginIng : false,
         kakaoUser : action.data
       }
     }
@@ -70,6 +73,7 @@ const reducer = (state = initailState, action) => {
       return {
         ...state,
         kakaoLogingIn : true, 
+        kakaoLoginIng : false,
       }
     }
     case ALBUM_REQUEST : {

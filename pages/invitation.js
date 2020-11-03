@@ -1,5 +1,5 @@
 /*global Kakao*/
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
 
@@ -8,21 +8,15 @@ import AppLayout from '../components/AppLayout';
 import { KAKAO_USER_REQUEST } from '../reducers/invitation';
 
 const Invitation = () => {
-  const { kakaoUser } = useSelector(state => state.invitation);
+  const { kakaoUser, kakaoLoginIng } = useSelector(state => state.invitation);
   const dispatch = useDispatch();
-  
-  const kakaoLoginInit = () => {
-    Kakao.Auth.login({
-      success: function (authObj) {
-        dispatch({
-          type : KAKAO_USER_REQUEST
-        })
-      },
-      fail: function (err) {
-        console.log(JSON.stringify(err));
-      }
-    });
-  };
+  useEffect(() => {
+    if (!kakaoUser) {
+      dispatch({
+        type : KAKAO_USER_REQUEST
+      })
+    }
+  },[kakaoUser]);
   return (
     <AppLayout>
       <Head>
@@ -31,23 +25,50 @@ const Invitation = () => {
       </Head>
       <div>
         <div>
-        {
-          kakaoUser
-          ?
-          <div>로그인됨</div>
-          :
-          <button id="kakaoLoginsBtn" onClick={() => kakaoLoginInit()}>
-            <div id="msgBox" style={{justifyContent:"center"}}>
-              <div id="msgMemoBox">
-                <textarea id="loginmsgText" disabled placeholder="카카오 로그인 해주세요."></textarea>
-              </div>
-            </div>
-          </button>
-        }
+          {
+            kakaoLoginIng
+            ?
+            <div>로딩중</div>
+            :
+            <KakaoLogin 
+              kakaoUser = {kakaoUser}
+            />
+          }
         </div>
       </div>
     </AppLayout>
   );
+};
+
+const KakaoLogin = (props) => {
+  const kakaoLoginInit = useCallback(() => {
+    Kakao.Auth.login({
+      success: function (authObj) {
+        console.log(authObj)
+        dispatch({
+          type : KAKAO_USER_REQUEST
+        })
+      },
+      fail: function (err) {
+        console.log(JSON.stringify(err));
+      }
+    });
+  });
+  if (props.kakaoUser) {
+    return (
+      <div>로그인됨</div>
+    )
+  } else {
+    return (
+      <button id="kakaoLoginsBtn" onClick={() => kakaoLoginInit()}>
+        <div id="msgBox" style={{justifyContent:"center"}}>
+          <div id="msgMemoBox">
+            <textarea id="loginmsgText" disabled placeholder="카카오 로그인 해주세요."></textarea>
+          </div>
+        </div>
+      </button>
+    )
+  }
 };
 
 export default Invitation;

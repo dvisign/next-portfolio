@@ -8,6 +8,7 @@ module.exports = withSass({
 module.exports = {
   webpack: (config) => {
     config.plugins.push(new Dotenv({ silent: true }));
+    console.log(config.plugins);
     return config;
-  }
+  },
 };
